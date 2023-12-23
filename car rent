@@ -1,0 +1,744 @@
+// Car Rental System in Java
+
+
+import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+import java.sql.ResultSet;
+
+public class Main {
+    public static void main(String[] args) {
+        // initialize objects and variables here
+        Scanner scanner = new Scanner(System.in);
+        // create a new Customer object
+        Customer customer = new Customer;
+        // call the mainMenu method
+        mainMenu(customer, scanner);
+    }
+
+    public static void mainMenu(Customer customer, Scanner scanner) {
+        int choice;
+        do {
+            // display the main menu to the user
+            System.out.println("1. Search for available cars");
+            System.out.println("2. Book a car");
+            System.out.println("3. View booking details");
+            System.out.println("4. Logout");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume the newline
+
+            // process the user's choice
+            switch (choice) {
+                case 1: // search for available cars
+                    // perform a search for available cars
+                    List<Car> result = searchCars(customer);
+
+                    // check if any cars were found
+                    if (result.isEmpty()) {
+                        System.out.println("No cars found that match your criteria.");
+                    } else {
+                        System.out.println("The following cars are available for you:");
+                        for (int i = 0; i < result.size(); i++) {
+                            System.out.print((i + 1) + ". ");
+                            result.get(i).display();
+                            System.out.println();
+                        }
+                    }
+                    break;
+                case 2: // book a car
+                    // prompt the user to select one of the displayed cars
+                    System.out.print("Enter the number of the car you want to book: ");
+                    int selectedIndex = scanner.nextInt() - 1;
+                    scanner.nextLine(); // consume the newline
+
+                    // check if the index is valid or not
+                    if (selectedIndex < 0 || selectedIndex >= result.size()) {
+                        System.out.println("Invalid number.");
+                        break;
+                    }
+
+                    // get the selected car from the result list
+                    Car selectedCar = result.get(selectedIndex);
+
+                    // book the car using the bookCar method
+                    boolean success = bookCar(customer, selectedCar);
+
+                    // display a confirmation message to the user
+                    if (success) {
+                        System.out.println("You have successfully booked the car.");
+                        // show the booking details to the user using the displayBookingDetails method
+                        displayBookingDetails(customer);
+                    } else {
+                        System.out.println("Sorry, something went wrong. Please try again.");
+                    }
+                    break;
+                case 3: // view booking details
+                    // display the booking details of the customer using the displayBookingDetails method
+                    displayBookingDetails(customer);
+                    break;
+                case 4: // logout
+                    System.out.println("You have successfully logged out.");
+                    break;
+                default: // invalid choice
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        } while (choice != 4); // repeat until the user chooses to logout
+    }
+
+    private static List<Car> searchCars(Customer customer) {
+    }
+
+    private static boolean bookCar(Customer customer, Car selectedCar) {
+    }
+
+    private static void displayBookingDetails(Customer customer) {
+    }
+}
+// A class to represent a car
+class Car {
+    private String RentedCar;
+    private String model; // the model of the car
+
+    private double price; // the daily rental price of the car
+    private boolean available; // the availability status of the car
+    private String make;
+
+    private String status;
+
+    public Car(String make, String model, double price) {
+        this.make = make;
+        this.model = model;
+        this.price = price;
+        this.status = "Available";
+    }
+
+    public void display() {
+        System.out.println("Make: " + make);
+        System.out.println("Model: " + model);
+        System.out.println("Price: " + price);
+        System.out.println("Status: " + status);
+    }
+
+    // A constructor to initialize the car object
+    public Car(String model, String plate, double price, String RentedCar) {
+        this.model = model;
+
+        this.price = price;
+        this.available = true; // the car is initially available
+        this.RentedCar=RentedCar;
+    }
+    public RentalAgency getRentedCar() {
+        return RentedCar;
+    }
+    // A getter method to return the model of the car
+    public String getModel() {
+        return this.model;
+    }
+
+    // A getter method to return the plate number of the car
+
+
+    // A getter method to return the price of the car
+    public double getPrice() {
+        return this.price;
+    }
+
+    // A getter method to return the availability status of the car
+    public boolean isAvailable() {
+        return this.available;
+    }
+
+    // A setter method to change the availability status of the car
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    // A method to display the details of the car
+    public void display() {
+        System.out.println("Model: " + this.model);
+        System.out.println("Price: $" + this.price + " per day");
+        System.out.println("Available: " + this.available);
+    }
+
+
+}
+
+// A class to represent a customer
+class Customer {
+    private String name; // the name of the customer
+    private String email; // the email address of the customer
+    private String password; // the password of the customer
+    private Car rentedCar; // the car that the customer has rented
+
+    // A constructor to initialize the customer object
+    public Customer(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.rentedCar = null; // the customer has not rented any car yet
+    }
+
+    // A getter method to return the name of the customer
+    public String getName() {
+        return this.name;
+    }
+
+    // A getter method to return the email of the customer
+    public String getEmail() {
+        return this.email;
+    }
+
+    // A getter method to return the password of the customer
+    public String getPassword() {
+        return this.password;
+    }
+
+    // A getter method to return the rented car of the customer
+    public Car getRentedCar() {
+        return this.rentedCar;
+    }
+
+    // A setter method to change the rented car of the customer
+    public void setRentedCar(Car rentedCar) {
+        this.rentedCar = rentedCar;
+    }
+
+    // A method to display the details of the customer
+    public void display() {
+        System.out.println("Name: " + this.name);
+        System.out.println("Email: " + this.email);
+        System.out.println("Password: " + this.password);
+        System.out.println("Rented Car: ");
+        if (this.rentedCar == null) {
+            System.out.println("None");
+        } else {
+            this.rentedCar.display();
+        }
+    }
+
+    public  getRentalPeriod() {
+    }
+}
+
+// A class to represent a rental agency
+class RentalAgency {
+    private String name; // the name of the rental agency
+    private String email; // the email address of the rental agency
+    private String password; // the password of the rental agency
+    private ArrayList<Car> cars; // the list of cars that the rental agency owns
+
+    // A constructor to initialize the rental agency object
+    public RentalAgency(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.cars = new ArrayList<Car>(); // the rental agency initially has no cars
+    }
+
+    // A getter method to return the name of the rental agency
+    public String getName() {
+        return this.name;
+    }
+
+    // A getter method to return the email of the rental agency
+    public String getEmail() {
+        return this.email;
+    }
+
+    // A getter method to return the password of the rental agency
+    public String getPassword() {
+        return this.password;
+    }
+
+    // A getter method to return the list of cars of the rental agency
+    public ArrayList<Car> getCars() {
+        return this.cars;
+    }
+
+    // A method to add a new car to the rental agency
+    public void addCar(Car car) {
+        this.cars.add(car);
+    }
+
+    // A method to remove a car from the rental agency
+    public void removeCar(Car car) {
+        this.cars.remove(car);
+    }
+
+    // A method to display the details of the rental agency
+    public void display() {
+        System.out.println("Name: " + this.name);
+        System.out.println("Email: " + this.email);
+        System.out.println("Password: " + this.password);
+        System.out.println("Cars: ");
+        for (Car car : this.cars) {
+            car.display();
+            System.out.println();
+        }
+    }
+}
+
+// A class to represent the car rental system
+class CarRentalSystem {
+
+    // A class to represent the car rental system
+        // The existing attributes and methods of the CarRentalSystem class
+        // ...
+    public class CarRentalSystem {
+        private ArrayList<Customer> customers;
+        private ArrayList<RentalAgency> agencies;
+        private Scanner scanner;
+
+        public CarRentalSystem() {
+            this.customers = new ArrayList<>();
+            this.agencies = new ArrayList<>();
+            this.scanner = new Scanner(System.in);
+        }
+
+        public void showAvailableCars() {
+            System.out.println("The available cars are:");
+
+            // Loop through the ResultSet object and display the car details
+            
+            while (rs.next()) {
+                String brand = rs.getString("brand");
+                String model = rs.getString("model");
+                double price = rs.getDouble("price");
+                boolean available = rs.getBoolean("available");
+                System.out.println("Brand: " + brand);
+                System.out.println("Model: " + model);
+                System.out.println("Price: $" + price);
+                System.out.println("Available: " + available);
+                System.out.println();
+            }
+        }
+
+        public void rentCar(String brand, String model) {
+            int rows;
+
+            // Perform the update query and store the number of affected rows in 'rows'
+
+            // Check if the update query affected any row
+            if (rows > 0) {
+                // Display the confirmation message
+                System.out.println("You have successfully rented the car:");
+                System.out.println("Brand: " + brand);
+                System.out.println("Model: " + model);
+                System.out.println();
+            } else {
+                // Display the error message
+                System.out.println("Sorry, the car is not available in our system.");
+            }
+        }
+
+        // Other methods and classes go here...
+
+        public static void main(String[] args) {
+            CarRentalSystem crs = new CarRentalSystem();
+            crs.showAvailableCars();
+            crs.rentCar("Toyota", "Corolla");
+            crs.showAvailableCars();
+            crs.returnCar("Toyota", "Corolla");
+            crs.showAvailableCars();
+        }
+
+        private void returnCar(String toyota, String corolla) {
+        }
+    }
+        // A new method to book a car for a customer
+        public boolean bookCar(Customer customer, Car car) {
+            // check if the customer and the car are valid and not null
+            if (customer == null || car == null) {
+                System.out.println("Invalid customer or car.");
+                return false;
+            }
+            // check if the customer has already rented a car or not
+            if (customer.getRentedCar() != null) {
+                System.out.println("You have already rented a car.");
+                return false;
+            }
+            // check if the car is available or not
+            if (!car.isAvailable()) {
+                System.out.println("The car is not available.");
+                return false;
+            }
+            // if all the checks are passed, assign the car to the customer and change the availability status of the car
+            customer.setRentedCar(car);
+            car.setAvailable(false);
+            System.out.println("You have successfully booked the car.");
+            return true;
+        }
+
+        // A new method to display the booking details of a customer
+        public void displayBookingDetails(Customer customer) {
+            // check if the customer is valid and not null
+            if (customer == null) {
+                System.out.println("Invalid customer.");
+                return;
+            }
+            // check if the customer has rented a car or not
+            if (customer.getRentedCar() == null) {
+                System.out.println("You have not rented any car.");
+                return;
+            }
+            // display the name and email of the customer
+            System.out.println("Customer Name: " + customer.getName());
+            System.out.println("Customer Email: " + customer.getEmail());
+            // display the model, plate, price, and location of the rented car
+            Car car = customer.getRentedCar();
+            System.out.println("Car Model: " + car.getModel());
+
+            System.out.println("Car Price: $" + car.getPrice() + " per day");
+
+            // display the start date, end date, and duration of the rental period
+            RentalPeriod rentalPeriod = customer.getRentalPeriod();
+            System.out.println("Rental Period: " + rentalPeriod.getStartDate() + " to " + rentalPeriod.getEndDate());
+            System.out.println("Rental Duration: " + rentalPeriod.getDuration() + " days");
+            // display the total amount to be paid by the customer
+            double totalAmount = car.getPrice() * rentalPeriod.getDuration();
+            System.out.println("Total Amount: $" + totalAmount);
+        }
+
+        // A modified method to display the customer menu of the system
+        public void displayCustomerMenu() {
+            System.out.println("Welcome to the Customer Menu");
+            System.out.println("Please select an option:");
+            System.out.println("1. Search for cars");
+            System.out.println("2. Book a car");
+            System.out.println("3. View booking details");
+            System.out.println("4. Logout");
+            System.out.print("Enter your choice: ");
+        }
+
+    class CarRentalSystem{
+        // An array to store the cars
+        private Car[] cars;
+
+        class CarRentalSystem {
+            // ... other fields and methods ...
+
+            public boolean bookCar(Customer customer, Car car) {
+                // check if the customer and the car are valid and not null
+                if (customer == null || car == null) {
+                    System.out.println("Invalid customer or car.");
+                    return false;
+                }
+
+                // check if the customer has already rented a car or not
+                if (customer.getRentedCar() != null) {
+                    System.out.println("You have already rented a car.");
+                    return false;
+                }
+
+                // update the customer's rented car
+                customer.setRentedCar(car);
+
+                // book the car
+                // ... booking logic ...
+
+                return true;
+            }
+
+            public void displayBookingDetails(Customer customer) {
+                // display the booking details of the customer
+                // ... display logic ...
+            }
+        }
+        // A constructor to initialize the cars
+        public boolean CarRentalSystem() {
+            // Create some sample cars
+            System.out.println("WELCOME TO 5 STAR CAR RENTING PLC 😊😊");
+            System.out.println("here are some of our cars that are avaliable in  our system");
+            cars = new Car[5];
+            cars[0] = new Car("Toyota", "Corolla", 30.0);
+            cars[1] = new Car("Honda", "Civic", 35.0);
+            cars[2] = new Car("Ford", "Fiesta", 25.0);
+            cars[3] = new Car("Nissan", "Altima", 40.0);
+            cars[4] = new Car("Hyundai", "Elantra", 32.0);
+            
+                public boolean bookCar(Customer Car customer;
+            customer, Car ; ) {
+                    // Check if the customer and the car are valid and not null
+                Object car = null;
+                if (customer == null || car == null) {
+                        System.out.println("Invalid customer or car.");
+                        return false; // Return false to indicate the booking was not successful
+                    }
+
+                    // Check if the customer has already rented a car or not
+                    if (customer.getRentedCar() != null) {
+                        System.out.println("You have already rented a car.");
+                        return false; // Return false to indicate the booking was not successful
+                    }
+
+                    // Perform the booking logic here...
+                    // You can set the rented car for the customer and update the car's availability
+                    // based on your application's requirements
+
+                    return true; // Return true to indicate the booking was successful
+                }
+            }
+        public class RentalSystem {
+            private Scanner scanner;
+
+            public RentalSystem() {
+                scanner = new Scanner(System.in);
+            }
+
+            public void handleCustomerMenu(Customer customer) {
+                int choice = 0;
+                do {
+                    displayCustomerMenu(); // display the customer menu
+                    choice = scanner.nextInt(); // read the user's choice
+                    scanner.nextLine(); // consume the newline
+                    switch (choice) {
+                        case 1: // search for cars
+                            // prompt the user to enter the location, rental period, car type, and budget
+                            System.out.print("Enter the location where you want to rent a car: ");
+                            String city = scanner.nextLine();
+                            String state = scanner.nextLine();
+                            String country = scanner.nextLine();
+                            Location location = new Location(city, state, country); // create a location object
+                            System.out.print("Enter the start date of the rental period (yyyy-mm-dd): ");
+                            String startDateString = scanner.nextLine();
+                            Date startDate = null;
+                            try {
+                                startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString); // parse the start date string
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.print("Enter the end date of the rental period (yyyy-mm-dd): ");
+                            String endDateString = scanner.nextLine();
+                            Date endDate = null;
+                            try {
+                                endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateString); // parse the end date string
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            RentalPeriod rentalPeriod = new RentalPeriod(startDate, endDate); // create a rental period object
+                            System.out.print("Enter the car type (model) you prefer: ");
+                            String carType = scanner.nextLine();
+                            System.out.print("Enter the budget you have: ");
+                            double budget = scanner.nextDouble();
+                            scanner.nextLine(); // consume the newline
+                            // use the searchCars method to find the available cars that match the user's criteria
+                            ArrayList<Car> result = searchCars(location, rentalPeriod, carType, budget);
+                            // Process the search results
+                            // ...
+                            break;
+                        // Handle other menu options
+                        // ...
+                    }
+                } while (choice != 0);
+            }
+
+            private void displayCustomerMenu() {
+                // Display the customer menu options
+                // ...
+            }
+
+            private ArrayList<Car> searchCars(Location location, RentalPeriod rentalPeriod, String carType, double budget) {
+                // Implement the logic to search for cars based on the provided criteria
+                // ...
+                return new ArrayList<Car>(); // Placeholder return statement
+            }
+
+            private class Customer {
+                public Customer(String name, String email, String password) {
+                }
+                // Customer class implementation
+                // ...
+            }
+
+            private class Location {
+                private String city;
+                private String state;
+                private String country;
+
+                public Location(String city, String state, String country) {
+                    this.city = city;
+                    this.state = state;
+                    this.country = country;
+                }
+
+                // Getters and setters for city, state, and country
+                // ...
+            }
+
+public class CarRentalSystem {
+    private ArrayList<Customer> customers; // the list of customers registered in the system
+    private ArrayList<RentalAgency> agencies; // the list of rental agencies registered in the system
+    private Scanner scanner; // a scanner object to read user input
+
+    // A constructor to initialize the car rental system object
+    public CarRentalSystem() {
+        this.customers = new ArrayList<>(); // the system initially has no customers
+        this.agencies = new ArrayList<>(); // the system initially has no agencies
+        this.scanner = new Scanner(System.in); // create a scanner object
+    }
+
+
+    // A method to display the main menu of the system
+    public void displayMenu() {
+        System.out.println("Welcome to the Car Rental System");
+        System.out.println("Please select an option:");
+        System.out.println("1. Register as a customer");
+        System.out.println("2. Register as a rental agency");
+        System.out.println("3. Login as a customer");
+        System.out.println("4. Login as a rental agency");
+        System.out.println("5. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    // A method to register a new customer in the system
+    public void registerCustomer() {
+        System.out.println("Register as a customer");
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter your email: ");
+        String email = scanner.nextLine();
+        System.out.print("Enter your password: ");
+        String password = scanner.nextLine();
+        Customer customer = new Customer(name, email, password); // create a new customer object
+        customers.add(customer); // add the customer to the list of customers
+        System.out.println("You have successfully registered as a customer.");
+    }
+
+    // A method to register a new rental agency in the system
+    public void registerAgency() {
+// A class to represent a location
+        class Location {
+            private String city; // the city of the location
+            private String state; // the state of the location
+            private String country; // the country of the location
+
+            // A constructor to initialize the location object
+            public Location(String city, String state, String country) {
+                this.city = city;
+                this.state = state;
+                this.country = country;
+            }
+
+            // A getter method to return the city of the location
+            public String getCity() {
+                return this.city;
+            }
+
+            // A getter method to return the state of the location
+            public String getState() {
+                return this.state;
+            }
+
+            // A getter method to return the country of the location
+            public String getCountry() {
+                return this.country;
+            }
+
+            // A method to check if two locations are equal or near
+            public boolean isEqualOrNear(Location other) {
+                // You can define your own logic to determine if two locations are equal or near
+                // For simplicity, we assume that two locations are equal or near if they have the same city and country
+                return this.city.equals(other.city) && this.country.equals(other.country);
+            }
+        }
+
+// A class to represent a rental period
+        class RentalPeriod {
+            private Date startDate; // the start date of the rental period
+            private Date endDate; // the end date of the rental period
+            private int duration; // the duration of the rental period in days
+
+            // A constructor to initialize the rental period object
+            public RentalPeriod(Date startDate, Date endDate) {
+                this.startDate = startDate;
+                this.endDate = endDate;
+                this.duration = (int) ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)); // calculate the duration in days
+            }
+
+            // A getter method to return the start date of the rental period
+            public Date getStartDate() {
+                return this.startDate;
+            }
+
+            // A getter method to return the end date of the rental period
+            public Date getEndDate() {
+                return this.endDate;
+            }
+
+            // A getter method to return the duration of the rental period
+            public int getDuration() {
+                return this.duration;
+            }
+
+            // A method to check if a car is available for the rental period
+            public boolean isAvailable(Car car) {
+                // You can define your own logic to determine if a car is available for the rental period
+                // For simplicity, we assume that a car is available for the rental period if it is not rented by any customer
+                public RentalAgency getRentedCar () {
+                    boolean rentedCar = false;
+                    return rentedCar;
+                    return car.getRentedCar() == null;
+                }
+            }
+        }
+        class rentCar(String brand, String model) {
+
+            int rows;
+
+            // Check if the update query affected any row
+            if(rows > 0)
+
+            {
+                // Display the confirmation message
+                System.out.println("You have successfully rented the car:");
+                System.out.println("Brand: " + brand);
+                System.out.println("Model: " + model);
+                System.out.println();
+            }
+            else
+
+            {
+                // Display the error message
+                System.out.println("Sorry, the car is not available  in our system.");
+            }
+
+        }
+
+
+// A class to test the car rental system
+        class Test {
+            public static void main(String[] args) {
+                // Create a car rental system object
+                CarRentalSystem crs = new CarRentalSystem();
+
+                // Display the available cars
+                crs.showAvailableCars();
+
+                // Rent a car
+                CarRentalSystem.rentCar("Toyota", "Corolla");
+
+                // Display the available cars
+                crs.showAvailableCars();
+
+                // Return a car
+                crs.returnCar("Toyota", "Corolla");
+
+                // Display the available cars
+                crs.showAvailableCars();
+            }
+        }
+    }
+
+    private static void rentCar(String toyota, String corolla) {
+    }
+
+    private void returnCar(String toyota, String corolla) {
+    }
+
+    private void showAvailableCars() {
+    }     
